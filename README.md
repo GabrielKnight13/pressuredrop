@@ -1,1 +1,1 @@
-"# pressuredrop computation using Darcy-Weisbach equation with aid of ChatGPT" 
+"# Pressure drop computation code with GUI using Darcy-Weisbach equation" 
