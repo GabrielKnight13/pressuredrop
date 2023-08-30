@@ -55,7 +55,7 @@ class Program(App):
             try:
                 self.rey = float(rho)*float(vel)*float(dia)/float(vis)
                 print(f"reynolds: {self.rey}")
-                self.reynolds.text = str(self.rey)
+                self.reynolds.text = "Re: " + str(self.rey)
                 return(self.rey)
             except AttributeError:
                 print("Hata!")
@@ -88,7 +88,7 @@ class Program(App):
                         self.fd = self.fd_new
                         
                 print(f"friction coeff: {self.fd}")
-                self.friction.text = str(self.fd)
+                self.friction.text = "f: " + str(self.fd)
                 
                 return(self.fd)
             except AttributeError:
@@ -115,7 +115,7 @@ class Program(App):
             try:
                 self.delta_p = float(self.fd) * float(L) /float(D) * 0.5 * float(rho) * float(vel)**2     
                 print(f"delta P: {self.delta_p}")
-                self.deltaP.text = str(self.delta_p)+ " " + "Pa"
+                self.deltaP.text = "delta_P: " + str(self.delta_p)+ " " + "Pa"
  
                 return self.delta_p
             except AttributeError:
