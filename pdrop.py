@@ -110,6 +110,7 @@ class Program(App):
                 return(self.fd)
                 
     def delta_P(self, fd, L, rho, D, vel):
+            #Darcy-Weisbach 
             try:
                 self.delta_p = float(self.fd) * float(L) /float(D) * 0.5 * float(rho) * float(vel)**2     
                 print(f"delta P: {self.delta_p}")
