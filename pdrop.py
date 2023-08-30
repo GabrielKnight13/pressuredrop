@@ -69,8 +69,7 @@ class Program(App):
                 print("0'a bölünme Hatası!")
                 self.reynolds.text = "0'a bölünme Hatası!"
                 self.rey = None
-                return(self.rey)
-                
+                return(self.rey)              
     def colebrook_fd(self, rey, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):  
             try:
                 self.roughness = float(self.text_input_roughness.text)
@@ -81,8 +80,7 @@ class Program(App):
                 for _ in range(max_iter):                        
                         self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd))
                         self.df = -0.5/self.fd**1.5 - 2.44/(self.rey*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd)))
-                        self.fd_new = self.fd - self.f/self.df
-  
+                        self.fd_new = self.fd - self.f/self.df 
                         if abs(self.fd_new - self.fd) < tol:
                                 break
                         self.fd = self.fd_new
