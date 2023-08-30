@@ -89,6 +89,7 @@ class Program(App):
                         
                 print(f"friction coeff: {self.fd}")
                 self.friction.text = str(self.fd)
+                
                 return(self.fd)
             except AttributeError:
                 print("Beklenmeyen hata!")
@@ -115,7 +116,7 @@ class Program(App):
                 self.delta_p = float(self.fd) * float(L) /float(D) * 0.5 * float(rho) * float(vel)**2     
                 print(f"delta P: {self.delta_p}")
                 self.deltaP.text = str(self.delta_p)+ " " + "Pa"
-            
+ 
                 return self.delta_p
             except AttributeError:
                 print("Beklenmeyen hata!")
