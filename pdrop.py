@@ -24,7 +24,7 @@ class Program(App):
             self.text_input_velocity = TextInput(hint_text='Enter velocity (m/s)', multiline=True, input_type='number')
             self.text_input_diameter = TextInput(hint_text='Enter diameter (m)', multiline=True, input_type='number')
             self.text_input_viscosity = TextInput(hint_text='Enter viscosity (Pa·s)', multiline=True, input_type='number')
-            self.text_input_rougness = TextInput(hint_text='Enter rougness', multiline=True, input_type='number')
+            self.text_input_roughness = TextInput(hint_text='Enter roughness', multiline=True, input_type='number')
             self.text_input_length = TextInput(hint_text='Enter length (m)', multiline=True, input_type='number')
             
             self.button_Re = Button(text = "Re",size_hint_y = .5)
@@ -32,7 +32,7 @@ class Program(App):
             self.button_deltaP = Button(text = "deltaP",size_hint_y = .5)
             
             self.button_Re.bind(on_press=lambda instance: self.Reynolds(self.text_input_density.text , self.text_input_velocity.text , self.text_input_diameter.text , self.text_input_viscosity.text ))
-            self.button_f.bind(on_press=lambda instance: self.colebrook_fd(self.rey, self.text_input_rougness.text))     
+            self.button_f.bind(on_press=lambda instance: self.colebrook_fd(self.rey, self.text_input_roughness.text))     
             self.button_deltaP.bind(on_press=lambda instance: self.delta_P(self.fd, self.text_input_length.text, self.text_input_density.text, self.text_input_diameter.text, self.text_input_velocity.text))
             
             self.govde.add_widget(self.reynolds)
@@ -42,7 +42,7 @@ class Program(App):
             self.govde.add_widget(self.text_input_density)
             self.govde.add_widget(self.text_input_diameter)
             self.govde.add_widget(self.text_input_length)
-            self.govde.add_widget(self.text_input_rougness)
+            self.govde.add_widget(self.text_input_roughness)
             self.govde.add_widget(self.text_input_velocity)
             self.govde.add_widget(self.text_input_viscosity)
             
@@ -73,14 +73,12 @@ class Program(App):
                 
     def colebrook_fd(self, rey, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):  
             try:
-                self.rougness = float(self.text_input_rougness.text)
-                self.diameter = float(self.text_input_diameter.text)
-            
-                self.epsilon_over_D = self.rougness / self.diameter
+                self.roughness = float(self.text_input_roughness.text)
+                self.diameter = float(self.text_input_diameter.text)            
+                self.epsilon_over_D = self.roughness / self.diameter
                 self.fd = initial_guess
                 #Newton-Raphson
-                for _ in range(max_iter):
-                        
+                for _ in range(max_iter):                        
                         self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd))
                         self.df = -0.5/self.fd**1.5 - 2.44/(self.rey*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd)))
                         self.fd_new = self.fd - self.f/self.df
