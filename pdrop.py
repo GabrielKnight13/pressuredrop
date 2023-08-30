@@ -20,12 +20,12 @@ class Program(App):
             self.friction = Label(text = "friction")
             self.deltaP = Label(text = "deltaP")
             
-            self.text_input_density = TextInput(hint_text='Enter density', multiline=True, input_type='number')
-            self.text_input_velocity = TextInput(hint_text='Enter velocity', multiline=True, input_type='number')
-            self.text_input_diameter = TextInput(hint_text='Enter diameter', multiline=True, input_type='number')
-            self.text_input_viscosity = TextInput(hint_text='Enter viscosity', multiline=True, input_type='number')
+            self.text_input_density = TextInput(hint_text='Enter density (kg/m³)', multiline=True, input_type='number')
+            self.text_input_velocity = TextInput(hint_text='Enter velocity (m/s)', multiline=True, input_type='number')
+            self.text_input_diameter = TextInput(hint_text='Enter diameter (m)', multiline=True, input_type='number')
+            self.text_input_viscosity = TextInput(hint_text='Enter viscosity (Pa·s)', multiline=True, input_type='number')
             self.text_input_rougness = TextInput(hint_text='Enter rougness', multiline=True, input_type='number')
-            self.text_input_length = TextInput(hint_text='Enter length', multiline=True, input_type='number')
+            self.text_input_length = TextInput(hint_text='Enter length (m)', multiline=True, input_type='number')
             
             self.button_Re = Button(text = "Re",size_hint_y = .5)
             self.button_f = Button(text = "f",size_hint_y = .5)
@@ -50,37 +50,86 @@ class Program(App):
             self.govde.add_widget(self.button_f)
             self.govde.add_widget(self.button_deltaP)
             
-            return self.govde
-            
+            return self.govde          
     def Reynolds(self, rho, vel, dia, vis):
-            self.rey = float(rho)*float(vel)*float(dia)/float(vis)
-            print(f"reynolds: {self.rey}")
-            self.reynolds.text = str(self.rey)
+            try:
+                self.rey = float(rho)*float(vel)*float(dia)/float(vis)
+                print(f"reynolds: {self.rey}")
+                self.reynolds.text = str(self.rey)
+                return(self.rey)
+            except AttributeError:
+                print("Beklenmeyen hata!")
+                self.reynolds.text = "Beklenmeyen hata!"
+            except ValueError:
+                print("Lütfen sadece sayı girin!")
+                self.reynolds.text = "Lütfen sadece sayı girin!"
+                self.rey = None
+                return(self.rey)
+            except ZeroDivisionError:
+                print("Bir sayıyı 0'a bölemezsiniz!")
+                self.reynolds.text = "0'a bölünme Hatası!"
+                self.rey = None
+                return(self.rey)
+                
+    def colebrook_fd(self, rey, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):  
+            try:
+                self.rougness = float(self.text_input_rougness.text)
+                self.diameter = float(self.text_input_diameter.text)
             
-            return(self.rey)
-            
-    def colebrook_fd(self, rey, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):   
-            self.epsilon_over_D = float(self.text_input_rougness.text) / float(self.text_input_diameter.text)
-            
-            self.fd = initial_guess
-            for _ in range(max_iter):
-                    self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.51/self.rey/math.sqrt(self.fd))
-                    self.df = -0.5/self.fd**1.5 - 2.51/(self.rey*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.51/self.rey/math.sqrt(self.fd)))
-                    self.fd_new = self.fd - self.f/self.df
-                    if abs(self.fd_new - self.fd) < tol:
-                        break
-                    self.fd = self.fd_new
-            print(f"friction coeff: {self.fd}")
-            self.friction.text = str(self.fd)
-            
-            return(self.fd)
-            
+                self.epsilon_over_D = self.rougness / self.diameter
+                self.fd = initial_guess
+                #Newton-Raphson
+                for _ in range(max_iter):
+                        
+                        self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd))
+                        self.df = -0.5/self.fd**1.5 - 2.44/(self.rey*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd)))
+                        self.fd_new = self.fd - self.f/self.df
+  
+                        if abs(self.fd_new - self.fd) < tol:
+                                break
+                        self.fd = self.fd_new
+                        
+                print(f"friction coeff: {self.fd}")
+                self.friction.text = str(self.fd)
+                return(self.fd)
+            except AttributeError:
+                print("Beklenmeyen hata!")
+                self.friction.text = "Beklenmeyen hata!"
+            except ValueError:
+                print("Lütfen sadece sayı girin!")
+                self.friction.text = "Lütfen sadece sayı girin!"
+                self.fd = None
+                return(self.fd)
+            except ZeroDivisionError:
+                print("Bir sayıyı 0'a bölemezsiniz!")
+                self.friction.text = "0'a bölünme Hatası!"
+                self.fd = None
+                return(self.fd)
+            except TypeError:
+                print("Lütfen doğru giriş yapın!")
+                self.friction.text = "Lütfen doğru giriş yapın!"
+                self.fd = None
+                return(self.fd)
+                
     def delta_P(self, fd, L, rho, D, vel):
-            self.delta_p = float(self.fd) * float(L) /float(D) * 0.5 * float(rho) * float(vel)**2     
-            print(f"delta P: {self.delta_p}")
-            self.deltaP.text = str(self.delta_p)
+            try:
+                self.delta_p = float(self.fd) * float(L) /float(D) * 0.5 * float(rho) * float(vel)**2     
+                print(f"delta P: {self.delta_p}")
+                self.deltaP.text = str(self.delta_p)+ " " + "Pa"
             
-            return self.delta_p
-
+                return self.delta_p
+            except AttributeError:
+                print("Beklenmeyen hata!")
+                self.deltaP.text = "Beklenmeyen hata!"          
+            except ValueError:
+                print("Lütfen sadece sayı girin!")
+                self.deltaP.text = "Lütfen sadece sayı girin!"            
+            except ZeroDivisionError:
+                print("Bir sayıyı 0'a bölemezsiniz!")
+                self.deltaP.text = "0'a bölünme Hatası!"         
+            except TypeError:
+                print("Lütfen doğru giriş yapın!")
+                self.deltaP.text = "Lütfen doğru giriş yapın!"
+                
 if __name__ == "__main__":   
     Program().run()
