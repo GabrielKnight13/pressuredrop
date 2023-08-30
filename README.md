@@ -4,4 +4,4 @@
  
  Simple GUI with kivy library
  
- So much help received from ChatGPT while preparing this simple program. 
+ So much help received from ChatGPT while preparing this program. 
