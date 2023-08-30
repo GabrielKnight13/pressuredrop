@@ -58,8 +58,8 @@ class Program(App):
                 self.reynolds.text = str(self.rey)
                 return(self.rey)
             except AttributeError:
-                print("Beklenmeyen hata!")
-                self.reynolds.text = "Beklenmeyen hata!"
+                print("Hata!")
+                self.reynolds.text = "Hata!"
             except ValueError:
                 print("Lütfen sadece sayı girin!")
                 self.reynolds.text = "Lütfen sadece sayı girin!"
@@ -92,8 +92,8 @@ class Program(App):
                 
                 return(self.fd)
             except AttributeError:
-                print("Beklenmeyen hata!")
-                self.friction.text = "Beklenmeyen hata!"
+                print("Hata!")
+                self.friction.text = "Hata!"
             except ValueError:
                 print("Lütfen sadece sayı girin!")
                 self.friction.text = "Lütfen sadece sayı girin!"
@@ -119,8 +119,8 @@ class Program(App):
  
                 return self.delta_p
             except AttributeError:
-                print("Beklenmeyen hata!")
-                self.deltaP.text = "Beklenmeyen hata!"          
+                print("Hata!")
+                self.deltaP.text = "Hata!"          
             except ValueError:
                 print("Lütfen sadece sayı girin!")
                 self.deltaP.text = "Lütfen sadece sayı girin!"            
