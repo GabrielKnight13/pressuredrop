@@ -66,7 +66,7 @@ class Program(App):
                 self.rey = None
                 return(self.rey)
             except ZeroDivisionError:
-                print("Bir sayıyı 0'a bölemezsiniz!")
+                print("0'a bölünme Hatası!")
                 self.reynolds.text = "0'a bölünme Hatası!"
                 self.rey = None
                 return(self.rey)
@@ -100,7 +100,7 @@ class Program(App):
                 self.fd = None
                 return(self.fd)
             except ZeroDivisionError:
-                print("Bir sayıyı 0'a bölemezsiniz!")
+                print("0'a bölünme Hatası!!")
                 self.friction.text = "0'a bölünme Hatası!"
                 self.fd = None
                 return(self.fd)
@@ -125,7 +125,7 @@ class Program(App):
                 print("Lütfen sadece sayı girin!")
                 self.deltaP.text = "Lütfen sadece sayı girin!"            
             except ZeroDivisionError:
-                print("Bir sayıyı 0'a bölemezsiniz!")
+                print("0'a bölünme Hatası!")
                 self.deltaP.text = "0'a bölünme Hatası!"         
             except TypeError:
                 print("Lütfen doğru giriş yapın!")
