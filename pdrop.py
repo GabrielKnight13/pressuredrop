@@ -33,7 +33,7 @@ class Program(App):
             self.button_temizle = Button(text = "temizle",size_hint_y = .5)
             
             self.button_Re.bind(on_press=lambda instance: self.Reynolds(self.text_input_density.text , self.text_input_velocity.text , self.text_input_diameter.text , self.text_input_viscosity.text ))
-            self.button_f.bind(on_press=lambda instance: self.colebrook_fd(self.rey, self.text_input_roughness.text))     
+            self.button_f.bind(on_press=lambda instance: self.colebrook_fd(self.reynolds_num, self.text_input_roughness.text))     
             self.button_deltaP.bind(on_press=lambda instance: self.delta_P(self.fd, self.text_input_length.text, self.text_input_density.text, self.text_input_diameter.text, self.text_input_velocity.text))
             self.button_temizle.bind(on_press=lambda instance: self.temizle( ))
         
@@ -56,25 +56,25 @@ class Program(App):
             return self.govde          
     def Reynolds(self, rho, vel, dia, vis):
             try:
-                self.rey = float(rho)*float(vel)*float(dia)/float(vis)
-                print(f"reynolds: {self.rey}")
-                self.reynolds.text = "Re: " + str(self.rey)
-                return(self.rey)
+                self.reynolds_num = float(rho)*float(vel)*float(dia)/float(vis)
+                print(f"reynolds: {self.reynolds_num}")
+                self.reynolds.text = "Re: " + str(self.reynolds_num)
+                return(self.reynolds_num)
             except AttributeError:
                 print("Hata!")
                 self.reynolds.text = "Hata!"
             except ValueError:
                 print("Lütfen sadece sayı girin!")
                 self.reynolds.text = "Lütfen sadece sayı girin!"
-                self.rey = None
-                return(self.rey)
+                self.reynolds_num = None
+                return(self.reynolds_num)
             except ZeroDivisionError:
                 print("0'a bölünme Hatası!")
                 self.reynolds.text = "0'a bölünme Hatası!"
-                self.rey = None
-                return(self.rey)
+                self.reynolds_num = None
+                return(self.reynolds_num)
                 
-    def colebrook_fd(self, rey, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):  
+    def colebrook_fd(self, reynolds_num, epsilon_over_D, initial_guess=0.01, max_iter=100, tol=1e-6):  
             try:
                 self.roughness = float(self.text_input_roughness.text)
                 self.diameter = float(self.text_input_diameter.text)            
@@ -82,8 +82,8 @@ class Program(App):
                 self.fd = initial_guess
                 #Newton-Raphson
                 for _ in range(max_iter):                        
-                        self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd))
-                        self.df = -0.5/self.fd**1.5 - 2.44/(self.rey*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.44/self.rey/math.sqrt(self.fd)))
+                        self.f = 1.0/math.sqrt(self.fd) + 2.0*math.log10(self.epsilon_over_D/3.7 + 2.44/self.reynolds_num/math.sqrt(self.fd))
+                        self.df = -0.5/self.fd**1.5 - 2.44/(self.reynolds_num*(self.fd**1.5)*math.log(10)*(self.epsilon_over_D/3.7 + 2.44/self.reynolds_num/math.sqrt(self.fd)))
                         self.fd_new = self.fd - self.f/self.df
   
                         if abs(self.fd_new - self.fd) < tol:
